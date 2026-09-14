@@ -1,0 +1,13 @@
+{
+  "name": "matpriser",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "check": "node --check src/index.js && node --check src/config/env.js && node --check src/lib/apiClient.js && node --check src/services/kassalapp.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
