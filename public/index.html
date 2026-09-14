@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Matpriser Meal Planner</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="planner" aria-labelledby="planner-title">
+        <div class="planner-header">
+          <div>
+            <p class="eyebrow">Weekly meal mix</p>
+            <h1 id="planner-title">Choose 7 dinners</h1>
+          </div>
+          <div class="plate-asset" aria-hidden="true">
+            <span></span>
+          </div>
+        </div>
+
+        <form class="meal-form" id="meal-form">
+          <div class="meal-grid" id="meal-grid">
+            <label class="meal-card meat">
+              <span class="meal-icon" aria-hidden="true">M</span>
+              <span class="meal-copy">
+                <span class="meal-title">Meat</span>
+                <span class="meal-subtitle">Beef, pork, mince</span>
+              </span>
+              <select name="meat" aria-label="Meat dinners"></select>
+            </label>
+
+            <label class="meal-card chicken">
+              <span class="meal-icon" aria-hidden="true">C</span>
+              <span class="meal-copy">
+                <span class="meal-title">Chicken</span>
+                <span class="meal-subtitle">Chicken and poultry</span>
+              </span>
+              <select name="chicken" aria-label="Chicken dinners"></select>
+            </label>
+
+            <label class="meal-card fish">
+              <span class="meal-icon" aria-hidden="true">F</span>
+              <span class="meal-copy">
+                <span class="meal-title">Fish</span>
+                <span class="meal-subtitle">Fish and seafood</span>
+              </span>
+              <select name="fish" aria-label="Fish dinners"></select>
+            </label>
+
+            <label class="meal-card vegetarian">
+              <span class="meal-icon" aria-hidden="true">V</span>
+              <span class="meal-copy">
+                <span class="meal-title">Vegetarian</span>
+                <span class="meal-subtitle">Plant-based dinners</span>
+              </span>
+              <select name="vegetarian" aria-label="Vegetarian dinners"></select>
+            </label>
+          </div>
+
+          <div class="summary-bar" aria-live="polite">
+            <div>
+              <span class="summary-label">Selected</span>
+              <strong><span id="selected-count">0</span>/7</strong>
+            </div>
+            <div>
+              <span class="summary-label">Remaining</span>
+              <strong id="remaining-count">7</strong>
+            </div>
+            <button type="submit" id="submit-button" disabled>Continue</button>
+          </div>
+        </form>
+
+        <section class="result-panel" id="result-panel" hidden>
+          <h2>Your weekly mix</h2>
+          <ul id="result-list"></ul>
+        </section>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

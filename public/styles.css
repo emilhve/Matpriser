@@ -1,0 +1,298 @@
+:root {
+  color-scheme: light;
+  --page: #f6f7f3;
+  --panel: #ffffff;
+  --ink: #1d2522;
+  --muted: #68736f;
+  --line: #d9dfd8;
+  --accent: #2f6f5e;
+  --accent-strong: #204f43;
+  --meat: #b84747;
+  --chicken: #c4862f;
+  --fish: #3476a6;
+  --veg: #4c8a4f;
+  --shadow: 0 24px 70px rgba(31, 47, 38, 0.14);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(135deg, rgba(47, 111, 94, 0.14), transparent 34%),
+    var(--page);
+  color: var(--ink);
+}
+
+button,
+select {
+  font: inherit;
+}
+
+.app-shell {
+  width: min(960px, calc(100% - 32px));
+  min-height: 100vh;
+  margin: 0 auto;
+  display: grid;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.planner {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.planner-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  padding: 32px;
+  border-bottom: 1px solid var(--line);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  line-height: 1;
+}
+
+.plate-asset {
+  width: 116px;
+  height: 116px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, #fff 0 34%, transparent 35%),
+    conic-gradient(
+      from 18deg,
+      var(--meat) 0 25%,
+      var(--chicken) 25% 50%,
+      var(--fish) 50% 75%,
+      var(--veg) 75% 100%
+    );
+  border: 8px solid #f3f5f0;
+}
+
+.plate-asset span {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid var(--line);
+  background: var(--panel);
+}
+
+.meal-form {
+  padding: 32px;
+}
+
+.meal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.meal-card {
+  min-height: 128px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfa;
+}
+
+.meal-card:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(47, 111, 94, 0.14);
+}
+
+.meal-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 800;
+}
+
+.meat .meal-icon {
+  background: var(--meat);
+}
+
+.chicken .meal-icon {
+  background: var(--chicken);
+}
+
+.fish .meal-icon {
+  background: var(--fish);
+}
+
+.vegetarian .meal-icon {
+  background: var(--veg);
+}
+
+.meal-copy {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.meal-title {
+  font-size: 1.08rem;
+  font-weight: 800;
+}
+
+.meal-subtitle {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+select {
+  width: 72px;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  padding: 0 12px;
+  font-weight: 800;
+}
+
+.summary-bar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f3f6f1;
+}
+
+.summary-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.summary-bar strong {
+  font-size: 1.32rem;
+}
+
+button {
+  min-height: 46px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  padding: 0 22px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: var(--accent-strong);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.result-panel {
+  margin: 0 32px 32px;
+  padding: 22px;
+  border-radius: 8px;
+  background: #fbfcfa;
+  border: 1px solid var(--line);
+}
+
+.result-panel h2 {
+  font-size: 1.1rem;
+}
+
+.result-panel ul {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.result-panel li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    width: min(100% - 20px, 960px);
+    align-items: start;
+    padding: 10px 0;
+  }
+
+  .planner-header,
+  .meal-form {
+    padding: 20px;
+  }
+
+  .planner-header {
+    align-items: start;
+  }
+
+  .plate-asset {
+    width: 84px;
+    height: 84px;
+    border-width: 6px;
+  }
+
+  .meal-grid,
+  .summary-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .meal-card {
+    grid-template-columns: auto minmax(0, 1fr) 72px;
+    min-height: 112px;
+    padding: 16px;
+  }
+
+  .result-panel {
+    margin: 0 20px 20px;
+  }
+}

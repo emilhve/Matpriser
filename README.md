@@ -46,7 +46,19 @@ src/
     apiClient.js    Reusable HTTP client with auth, JSON parsing, timeout, and errors
   services/
     kassalapp.js    Functions for the endpoints in api-specification.json
+  data/
+    dinnerCategories.js  Dinner-related category IDs discovered from Kassalapp
   index.js          Starter entry point
+```
+
+Dinner category IDs can be imported like this:
+
+```js
+import {
+  dinnerCategoryGroups,
+  dinnerCategoryIds,
+  dinnerCategoryById
+} from "./src/data/dinnerCategories.js";
 ```
 
 ## Useful Commands
@@ -55,6 +67,10 @@ src/
 npm run check
 npm start
 ```
+
+## Website Prototype
+
+Open `public/index.html` in a browser to try the first meal mix screen.
 
 ## Next Questions
 
