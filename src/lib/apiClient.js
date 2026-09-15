@@ -1,4 +1,5 @@
 import { env } from "../config/env.js";
+import { requireEnvValue } from "../config/env.js";
 
 export class ApiError extends Error {
   constructor(message, { status, body } = {}) {
@@ -72,14 +73,23 @@ function appendQueryParams(url, query = {}) {
       continue;
     }
 
-    url.searchParams.set(key, value);
+    url.searchParams.set(key, serializeQueryValue(value));
   }
 }
 
+function serializeQueryValue(value) {
+  if (typeof value === "boolean") {
+    return value ? "1" : "0";
+  }
+
+  return value;
+}
+
 function buildAuthHeader() {
+  const apiKey = requireEnvValue("API_KEY", env.apiKey);
   const value = env.apiAuthScheme
-    ? `${env.apiAuthScheme} ${env.apiKey}`
-    : env.apiKey;
+    ? `${env.apiAuthScheme} ${apiKey}`
+    : apiKey;
 
   return {
     [env.apiAuthHeader]: value

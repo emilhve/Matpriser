@@ -31,8 +31,13 @@ body {
 }
 
 button,
-select {
+select,
+a {
   font: inherit;
+}
+
+a {
+  color: inherit;
 }
 
 .app-shell {
@@ -243,20 +248,256 @@ button:disabled {
   font-size: 1.1rem;
 }
 
-.result-panel ul {
-  display: grid;
-  gap: 8px;
-  margin: 16px 0 0;
-  padding: 0;
-  list-style: none;
+.status-text {
+  margin: 10px 0 0;
+  color: var(--muted);
 }
 
-.result-panel li {
+.recipe-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.recipe-card {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  border-top-width: 5px;
+}
+
+.recipe-card.meat {
+  border-top-color: var(--meat);
+}
+
+.recipe-card.chicken {
+  border-top-color: var(--chicken);
+}
+
+.recipe-card.fish {
+  border-top-color: var(--fish);
+}
+
+.recipe-card.vegetarian {
+  border-top-color: var(--veg);
+}
+
+.recipe-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.recipe-meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.ingredient-list,
+.step-list {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.ingredient-list {
+  color: var(--ink);
+}
+
+.step-list {
+  color: var(--muted);
+}
+
+.ingredient-list li,
+.step-list li {
+  margin-top: 5px;
+}
+
+.result-panel ul {
+  padding: 0;
+}
+
+.result-panel ol {
+  padding-left: 20px;
+}
+
+.tickets-page {
+  background:
+    linear-gradient(135deg, rgba(52, 118, 166, 0.12), transparent 32%),
+    var(--page);
+}
+
+.tickets-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.tickets-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.secondary-action {
+  display: inline-grid;
+  min-height: 42px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 0 16px;
+  color: var(--ink);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.secondary-action:hover {
+  border-color: var(--accent);
+}
+
+.ticket-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.order-ticket,
+.empty-ticket {
+  position: relative;
+  min-height: 280px;
+  padding: 22px;
+  border: 1px solid #d8d1bf;
+  border-radius: 4px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(29, 37, 34, 0.035) 0,
+      rgba(29, 37, 34, 0.035) 1px,
+      transparent 1px,
+      transparent 28px
+    ),
+    #fffdf6;
+  box-shadow: 0 18px 40px rgba(31, 47, 38, 0.12);
+}
+
+.order-ticket::before,
+.order-ticket::after {
+  position: absolute;
+  right: 16px;
+  left: 16px;
+  height: 1px;
+  content: "";
+  background-image: linear-gradient(to right, #cfc6ae 50%, transparent 50%);
+  background-size: 10px 1px;
+}
+
+.order-ticket::before {
+  top: 54px;
+}
+
+.order-ticket::after {
+  bottom: 18px;
+}
+
+.order-ticket.meat {
+  border-top: 5px solid var(--meat);
+}
+
+.order-ticket.chicken {
+  border-top: 5px solid var(--chicken);
+}
+
+.order-ticket.fish {
+  border-top: 5px solid var(--fish);
+}
+
+.order-ticket.vegetarian {
+  border-top: 5px solid var(--veg);
+}
+
+.ticket-meta {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 0;
-  border-top: 1px solid var(--line);
+  margin-bottom: 24px;
+  color: var(--muted);
+  font-family: "Courier New", ui-monospace, monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.order-ticket h2 {
+  margin: 0 0 16px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+.ticket-ingredients {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.98rem;
+}
+
+.ticket-ingredients li {
+  padding-left: 2px;
+}
+
+.ingredient-name {
+  display: block;
+  font-weight: 700;
+}
+
+.ingredient-match {
+  display: grid;
+  gap: 2px;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.25;
+}
+
+.matched-product {
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
+.ingredient-match.missing,
+.quantity-warning {
+  color: #8a5f25;
+  font-family: "Courier New", ui-monospace, monospace;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ticket-total {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid #d8d1bf;
+  font-family: "Courier New", ui-monospace, monospace;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.empty-ticket {
+  display: grid;
+  place-items: center;
+  min-height: 180px;
+  color: var(--muted);
+  font-weight: 800;
 }
 
 @media (max-width: 720px) {
@@ -282,8 +523,19 @@ button:disabled {
   }
 
   .meal-grid,
-  .summary-bar {
+  .summary-bar,
+  .recipe-list,
+  .ticket-grid {
     grid-template-columns: 1fr;
+  }
+
+  .tickets-shell {
+    width: min(100% - 20px, 1180px);
+    padding: 20px 0;
+  }
+
+  .tickets-header {
+    align-items: start;
   }
 
   .meal-card {

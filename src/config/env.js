@@ -42,6 +42,10 @@ function readRequiredEnv(name) {
   return value;
 }
 
+function readOptionalEnv(name, fallback = "") {
+  return process.env[name] ?? fallback;
+}
+
 function readNumberEnv(name, fallback) {
   const value = process.env[name];
 
@@ -61,9 +65,22 @@ function readNumberEnv(name, fallback) {
 loadDotEnv();
 
 export const env = {
-  apiBaseUrl: readRequiredEnv("API_BASE_URL").replace(/\/$/, ""),
-  apiKey: readRequiredEnv("API_KEY"),
+  apiBaseUrl: readOptionalEnv("API_BASE_URL", "https://kassal.app/api/v1").replace(/\/$/, ""),
+  apiKey: readOptionalEnv("API_KEY"),
   apiAuthHeader: process.env.API_AUTH_HEADER || "Authorization",
   apiAuthScheme: process.env.API_AUTH_SCHEME ?? "Bearer",
-  apiTimeoutMs: readNumberEnv("API_TIMEOUT_MS", 10000)
+  apiTimeoutMs: readNumberEnv("API_TIMEOUT_MS", 10000),
+  geminiApiKey: readOptionalEnv("GEMINI_API_KEY"),
+  geminiModel: readOptionalEnv("GEMINI_MODEL", "gemini-3.5-flash-lite"),
+  geminiMaxOutputTokens: readNumberEnv("GEMINI_MAX_OUTPUT_TOKENS", 2500),
+  geminiTemperature: readNumberEnv("GEMINI_TEMPERATURE", 0.9),
+  port: readNumberEnv("PORT", 3000)
 };
+
+export function requireEnvValue(name, value) {
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+
+  return value;
+}

@@ -12,6 +12,7 @@ const remainingCount = document.querySelector("#remaining-count");
 const submitButton = document.querySelector("#submit-button");
 const resultPanel = document.querySelector("#result-panel");
 const resultList = document.querySelector("#result-list");
+const statusText = document.querySelector("#status-text");
 const selects = new Map(
   mealTypes.map((mealType) => [
     mealType.key,
@@ -23,7 +24,7 @@ for (const select of selects.values()) {
   select.addEventListener("change", updatePlanner);
 }
 
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const values = getValues();
@@ -33,7 +34,7 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
-  renderResult(values);
+  await generateRecipes(values);
 });
 
 updatePlanner();
@@ -80,15 +81,37 @@ function renderOptions(select, max, selectedValue) {
   select.innerHTML = options.join("");
 }
 
-function renderResult(values) {
-  resultList.innerHTML = mealTypes
-    .map((mealType) => {
-      const count = values[mealType.key];
-      const mealText = count === 1 ? "dinner" : "dinners";
-
-      return `<li><span>${mealType.label}</span><strong>${count} ${mealText}</strong></li>`;
-    })
-    .join("");
-
+async function generateRecipes(values) {
+  setLoading(true);
   resultPanel.hidden = false;
+  resultList.replaceChildren();
+  statusText.textContent = "Generating recipes and checking grocery prices...";
+
+  try {
+    const response = await fetch("/api/meal-plan", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(values)
+    });
+
+    const body = await response.json();
+
+    if (!response.ok) {
+      throw new Error(body.error || "Could not generate recipes");
+    }
+
+    sessionStorage.setItem("mealPlan", JSON.stringify(body));
+    window.location.href = "/recipes.html";
+  } catch (error) {
+    statusText.textContent = error.message;
+  } finally {
+    setLoading(false);
+  }
+}
+
+function setLoading(isLoading) {
+  submitButton.disabled = isLoading || getSelectedTotal(getValues()) !== totalMeals;
+  submitButton.textContent = isLoading ? "Generating..." : "Generate recipes";
 }
