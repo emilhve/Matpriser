@@ -39,6 +39,9 @@ const categoryHintsBySearchTerm = new Map([
   ["rømme", 152],
   ["romme", 152],
   ["creme fraiche", 302],
+  ["grønnsaksbuljong", 154],
+  ["gronnsaksbuljong", 154],
+  ["buljong", 154],
   ["gulost", 433],
   ["hvitost", 433],
   ["norvegia", 433],
@@ -73,6 +76,14 @@ const categoryHintsBySearchTerm = new Map([
   ["kyllingvinger", 622],
   ["kyllingkjøttdeig", 463],
   ["kyllingkjottdeig", 463],
+  ["pølse", 63],
+  ["polse", 63],
+  ["pølser", 63],
+  ["polser", 63],
+  ["grillpølser", 295],
+  ["grillpolser", 295],
+  ["wienerpølser", 327],
+  ["wienerpolser", 327],
   ["kjøttdeig", 169],
   ["kjottdeig", 169],
   ["karbonadedeig", 190],
@@ -84,6 +95,8 @@ const categoryHintsBySearchTerm = new Map([
   ["torsk", 182],
   ["fiskekaker", 270],
   ["fiskepinner", 472],
+  ["flatbrød", 196],
+  ["flatbrod", 196],
   ["tunfisk i vann", 8652],
   ["tunfisk i olje", 8079],
   ["reker", 229],
@@ -112,10 +125,19 @@ const searchAliasesBySearchTerm = new Map([
   ["melk", ["lettmelk", "helmelk"]],
   ["fløte", ["matfløte", "kremfløte"]],
   ["flote", ["matfløte", "kremfløte"]],
+  ["grønnsaksbuljong", ["grønnsaksbuljong klar", "buljong"]],
+  ["gronnsaksbuljong", ["grønnsaksbuljong klar", "buljong"]],
+  ["buljong", ["grønnsaksbuljong", "buljongterninger"]],
   ["ost", ["hvitost", "gulost"]],
   ["olje", ["rapsolje", "olivenolje"]],
   ["hvitløk", ["hvitløk økologisk"]],
   ["hvitlok", ["hvitløk økologisk"]],
+  ["pølse", ["pølser", "grillpølser", "wienerpølser"]],
+  ["polse", ["pølser", "grillpølser", "wienerpølser"]],
+  ["pølser", ["pølse", "grillpølser", "wienerpølser"]],
+  ["polser", ["pølse", "grillpølser", "wienerpølser"]],
+  ["flatbrød", ["flatbrod"]],
+  ["flatbrod", ["flatbrød"]],
   ["tunfisk", ["tunfisk i vann", "tunfisk i olje"]],
   ["gulrot", ["gulrot 1kg"]],
   ["erter", ["grønne erter"]],
@@ -125,8 +147,11 @@ const rejectedProductTermsBySearchTerm = new Map([
   ["melk", ["pølse", "polse", "sjokolade", "morsmelk"]],
   ["fløte", ["fløtepotet", "fløteis", "saus", "topping"]],
   ["flote", ["flotepotet", "floteis", "saus", "topping"]],
-  ["rømme", ["dressing", "grøt", "grot", "peanøtt", "peanott"]],
+  ["rømme", ["dressing", "grøt", "grot", "peanøtt", "peanott", "rommet"]],
+  ["romme", ["dressing", "grøt", "grot", "peanøtt", "peanott", "rommet"]],
   ["creme fraiche", ["dressing"]],
+  ["grønnsaksbuljong", ["kylling", "okse", "kjøtt", "kjott", "fisk"]],
+  ["gronnsaksbuljong", ["kylling", "okse", "kjøtt", "kjott", "fisk"]],
   ["ost", ["gatorade", "frost", "postei", "saus"]],
   ["smør", ["peanøtt", "peanott", "smøreost", "smoreost", "smørbrød", "smorbrod", "sandefjord"]],
   ["olje", ["babyolje", "grillolje"]],
@@ -149,6 +174,10 @@ const rejectedProductTermsBySearchTerm = new Map([
   ["kyllingfilet", ["marinert", "spiseklar", "bacon", "tomat", "urter", "hvitløk", "hvitlok", "pepper"]],
   ["kyllinglår", ["marinert", "hvitløk", "hvitlok", "pepper", "bbq"]],
   ["kyllinglar", ["marinert", "hvitløk", "hvitlok", "pepper", "bbq"]],
+  ["pølse", ["pølsebrød", "polsebrod", "lompe", "vegansk", "vegetar", "plantebasert"]],
+  ["polse", ["pølsebrød", "polsebrod", "lompe", "vegansk", "vegetar", "plantebasert"]],
+  ["pølser", ["pølsebrød", "polsebrod", "lompe", "vegansk", "vegetar", "plantebasert"]],
+  ["polser", ["pølsebrød", "polsebrod", "lompe", "vegansk", "vegetar", "plantebasert"]],
   ["tomater", ["basilikum", "oregano", "soltørket", "soltorket"]],
   ["brød", ["pølsebrød", "polsebrod", "hamburgerbrød", "hamburgerbrod", "skolebrød", "skolebrod", "wienerbrød", "wienerbrod"]]
 ]);
@@ -245,7 +274,7 @@ async function searchProductGroupsWithCache(searchTerm, searchCache) {
 }
 
 function buildSearchQueryGroups(searchTerm) {
-  const terms = [searchTerm, ...(searchAliasesBySearchTerm.get(normalizeText(searchTerm)) || [])];
+  const terms = [searchTerm, ...getSearchAliases(searchTerm)];
   const categoryQueries = [];
   const aliasQueries = [];
   const fallbackQueries = [];
@@ -302,7 +331,7 @@ function isBlockedDinnerProduct(product) {
 }
 
 function hasRejectedProductTerm(product, searchTerm) {
-  const rejectedTerms = rejectedProductTermsBySearchTerm.get(normalizeText(searchTerm));
+  const rejectedTerms = getSearchTermMapValue(rejectedProductTermsBySearchTerm, searchTerm);
 
   if (!rejectedTerms) {
     return false;
@@ -393,8 +422,8 @@ function normalizeUnit(unit) {
 }
 
 function getRelevanceScore(productName, searchTerm) {
-  const productWords = normalizeText(productName).split(/[^a-z0-9æøå]+/).filter(Boolean);
-  const terms = [searchTerm, ...(searchAliasesBySearchTerm.get(normalizeText(searchTerm)) || [])];
+  const productWords = normalizeText(productName).split(/[^a-z0-9]+/).filter(Boolean);
+  const terms = [searchTerm, ...getSearchAliases(searchTerm)];
   const words = terms.flatMap((term) => normalizeText(term).split(/\s+/).filter(Boolean));
 
   if (!words.length) {
@@ -406,12 +435,8 @@ function getRelevanceScore(productName, searchTerm) {
       return score + 6;
     }
 
-    if (productWords.some((productWord) => productWord.startsWith(word))) {
-      return score + 4;
-    }
-
-    if (productWords.some((productWord) => productWord.endsWith(word))) {
-      return score + 2;
+    if (productWords.some((productWord) => isCompoundIngredientWord(productWord, word))) {
+      return score + 6;
     }
 
     return score;
@@ -420,10 +445,10 @@ function getRelevanceScore(productName, searchTerm) {
 
 function compareCandidates(a, b) {
   return (
+    b.relevanceScore - a.relevanceScore ||
     Number(a.productMatch.quantityEstimated) - Number(b.productMatch.quantityEstimated) ||
     a.basketCost - b.basketCost ||
-    a.unitPrice - b.unitPrice ||
-    b.relevanceScore - a.relevanceScore
+    a.unitPrice - b.unitPrice
   );
 }
 
@@ -443,6 +468,23 @@ function normalizeText(value) {
 
 function getCategoryIdHint(searchTerm) {
   return categoryHintsBySearchTerm.get(normalizeText(searchTerm));
+}
+
+function getSearchAliases(searchTerm) {
+  return getSearchTermMapValue(searchAliasesBySearchTerm, searchTerm) || [];
+}
+
+function getSearchTermMapValue(map, searchTerm) {
+  const rawTerm = String(searchTerm || "").trim().toLowerCase();
+  return map.get(normalizeText(searchTerm)) || map.get(rawTerm);
+}
+
+function isCompoundIngredientWord(productWord, word) {
+  return (
+    word.length >= 3 &&
+    productWord.length > word.length + 1 &&
+    (productWord.startsWith(word) || productWord.endsWith(word))
+  );
 }
 
 function inferUnitFromName(name) {

@@ -156,6 +156,48 @@ test("rejects composed products for broad dairy ingredients", () => {
   assert.equal(match.productId, 2);
 });
 
+test("does not match rømme inside unrelated words", () => {
+  const match = selectBestProductForIngredient(
+    [product({ id: 1, name: "Det Innerste Rommet", price: 10, weight: 300, unit: "g" })],
+    { name: "rømme", searchTerm: "rømme", amount: 200, unit: "g" }
+  );
+
+  assert.equal(match, null);
+});
+
+test("prefers vegetable stock when matching grønnsaksbuljong", () => {
+  const match = selectBestProductForIngredient(
+    [
+      product({ id: 1, name: "Kyllingbuljong 80g", price: 10, weight: 80, unit: "g" }),
+      product({ id: 2, name: "Grønnsaksbuljong Klar 80g Maggi", price: 20, weight: 80, unit: "g" })
+    ],
+    { name: "grønnsaksbuljong", searchTerm: "grønnsaksbuljong", amount: 20, unit: "g" }
+  );
+
+  assert.equal(match.productId, 2);
+});
+
+test("rejects vegan sausage when matching regular pølser", () => {
+  const match = selectBestProductForIngredient(
+    [
+      product({ id: 1, name: "Pølser vegansk 300g", price: 20, weight: 300, unit: "g" }),
+      product({ id: 2, name: "Grillpølser 600g", price: 39, weight: 600, unit: "g" })
+    ],
+    { name: "pølser", searchTerm: "pølser", amount: 300, unit: "g" }
+  );
+
+  assert.equal(match.productId, 2);
+});
+
+test("matches flatbrød as a basic ingredient", () => {
+  const match = selectBestProductForIngredient(
+    [product({ id: 1, name: "Flatbrød Mors Hjemmebakte 520g", price: 54, weight: 520, unit: "g" })],
+    { name: "flatbrød", searchTerm: "flatbrød", amount: 100, unit: "g" }
+  );
+
+  assert.equal(match.productId, 1);
+});
+
 test("rejects chicken blend when matching meat mince", () => {
   const match = selectBestProductForIngredient(
     [

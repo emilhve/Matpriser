@@ -100,7 +100,7 @@ function renderProductMatch(productMatch) {
   product.textContent = productMatch.name;
 
   const store = document.createElement("span");
-  store.textContent = `${productMatch.storeName} · ${formatCurrency(productMatch.basketCost)}`;
+  store.textContent = `${productMatch.storeName} - ${formatCurrency(productMatch.basketCost)}`;
 
   wrapper.append(product, store);
 

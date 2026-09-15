@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shopping List</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body class="shopping-page">
+    <main class="shopping-shell">
+      <header class="shopping-header">
+        <div>
+          <p class="eyebrow">Shopping list</p>
+          <h1>Buy by store</h1>
+        </div>
+        <a class="secondary-action" href="/recipes.html">Back</a>
+      </header>
+
+      <section class="shopping-summary" id="shopping-summary" aria-live="polite"></section>
+      <section class="store-list" id="store-list" aria-live="polite"></section>
+      <section class="unmatched-panel" id="unmatched-panel" hidden>
+        <h2>Items without price match</h2>
+        <ul id="unmatched-list"></ul>
+      </section>
+    </main>
+
+    <script src="./shopping-list.js"></script>
+  </body>
+</html>
